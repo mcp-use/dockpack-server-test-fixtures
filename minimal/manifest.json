@@ -1,0 +1,5 @@
+{
+  "runtime": "node",
+  "start": "node index.js",
+  "expect": "pass"
+}

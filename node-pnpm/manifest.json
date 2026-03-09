@@ -1,0 +1,7 @@
+{
+  "runtime": "node",
+  "setup": "pnpm install",
+  "build": "pnpm build",
+  "start": "pnpm start",
+  "expect": "pass"
+}

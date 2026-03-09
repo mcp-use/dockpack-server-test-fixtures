@@ -1,0 +1,9 @@
+{
+  "name": "node-monorepo-fixture",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "build": "npm run build --workspace=packages/server"
+  }
+}

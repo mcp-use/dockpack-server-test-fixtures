@@ -1,0 +1,8 @@
+{
+  "runtime": "node",
+  "setup": "npm ci",
+  "build": "npm run build",
+  "start": "node packages/server/dist/index.js",
+  "workdir": ".",
+  "expect": "pass"
+}

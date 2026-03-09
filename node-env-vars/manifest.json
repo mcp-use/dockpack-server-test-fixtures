@@ -1,0 +1,11 @@
+{
+  "runtime": "node",
+  "setup": "npm ci",
+  "build": "npm run build",
+  "start": "node dist/index.js",
+  "env": {
+    "SERVER_NAME": "env-test",
+    "SERVER_PORT": "3000"
+  },
+  "expect": "pass"
+}
