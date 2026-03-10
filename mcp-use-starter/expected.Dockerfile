@@ -15,19 +15,6 @@ WORKDIR /app
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
-# Generate mcp-use tool registry types
-RUN if [ -f package.json ] && grep -q '"mcp-use"' package.json; then \
-      server_file=""; \
-      for f in index.ts src/index.ts server.ts src/server.ts; do \
-        if [ -f "$f" ]; then server_file="$f"; break; fi; \
-      done; \
-      if [ -n "$server_file" ]; then \
-        npx mcp-use generate-types --server "$server_file"; \
-      else \
-        echo "No server file found - skipping mcp-use generate-types"; \
-      fi; \
-    fi
-
 # Build application
 RUN npm run build
 
