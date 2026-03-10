@@ -1,0 +1,48 @@
+name: Build Dockerfiles
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        fixture:
+          - node-npm
+          - node-pnpm
+          - node-no-build
+          - node-script-start
+          - node-monorepo
+          - node-env-vars
+          - node-custom-port
+          - node-root-dir
+          - minimal
+          - python-pip
+          - python-uv
+          - python-no-start
+          - python-src-layout
+
+    name: ${{ matrix.fixture }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve build context
+        id: ctx
+        run: |
+          FIXTURE="${{ matrix.fixture }}"
+          ROOT_DIR=$(jq -r '.root_dir // empty' "$FIXTURE/manifest.json")
+          if [ -n "$ROOT_DIR" ]; then
+            echo "build_context=$FIXTURE/$ROOT_DIR" >> "$GITHUB_OUTPUT"
+          else
+            echo "build_context=$FIXTURE" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -f ${{ matrix.fixture }}/expected.Dockerfile \
+            -t fixture-${{ matrix.fixture }} \
+            ${{ steps.ctx.outputs.build_context }}
