@@ -1,4 +1,3 @@
-
 # Node.js workspace/monorepo application
 FROM mirror.gcr.io/library/node:22-alpine AS build
 WORKDIR /app

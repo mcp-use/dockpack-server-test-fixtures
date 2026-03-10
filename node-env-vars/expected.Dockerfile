@@ -1,4 +1,3 @@
-
 # Optimized Dockerfile for Node.js applications
 FROM mirror.gcr.io/library/node:22-alpine AS dependencies
 WORKDIR /app
