@@ -24,6 +24,10 @@ jobs:
           - python-uv
           - python-no-start
           - python-src-layout
+          - mcp-use-blank
+          - mcp-use-starter
+          - mcp-use-mcp-apps
+          - mcp-use-python-starter
 
     name: ${{ matrix.fixture }}
     steps:
