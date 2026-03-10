@@ -23,7 +23,7 @@ jobs:
 
       - name: Scaffold TypeScript templates
         run: |
-          for template in starter mcp-ui apps-sdk; do
+          for template in starter apps-sdk; do
             fixture="mcp-use-$template"
             tmp_dir="/tmp/scaffold-$template"
 
