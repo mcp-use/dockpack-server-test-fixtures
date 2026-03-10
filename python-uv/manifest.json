@@ -1,6 +1,4 @@
 {
-  "runtime": "python",
-  "setup": "uv sync",
   "start": "uv run server.py",
   "expect": "pass"
 }

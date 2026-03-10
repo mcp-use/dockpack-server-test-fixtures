@@ -1,6 +1,4 @@
 {
-  "runtime": "node",
-  "setup": "npm ci",
   "start": "node index.js",
   "expect": "pass"
 }

@@ -1,6 +1,11 @@
 # Dockpack Server Test Fixtures
 
-Test fixtures for the Dockpack server deployment pipeline. Each subdirectory contains a self-contained MCP server project with a `manifest.json` that declares how to set up, build, and run it.
+Test fixtures for the Dockpack server deployment pipeline. Each subdirectory contains a self-contained MCP server project with:
+
+- `manifest.json` — user-provided inputs (what a real user would specify)
+- `expected.Dockerfile` — the known-good Dockerfile that Dockpack should generate
+
+Dockpack auto-detects runtime and package manager from project files. The manifest does **not** specify these — that's what we're testing.
 
 ## Manifest Schema
 
@@ -8,8 +13,6 @@ Each fixture contains a `manifest.json` with the following fields:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `runtime` | `"node"` \| `"python"` | yes | Language runtime |
-| `setup` | `string` | no | Dependency installation command |
 | `build` | `string` | no | Build command (omit if no build step) |
 | `start` | `string` | no | Start command (omit to test auto-detection) |
 | `env` | `object` | no | Environment variables required at runtime |

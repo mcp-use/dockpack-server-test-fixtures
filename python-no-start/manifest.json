@@ -1,5 +1,3 @@
 {
-  "runtime": "python",
-  "setup": "pip install -r requirements.txt",
   "expect": "pass"
 }

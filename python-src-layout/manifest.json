@@ -1,6 +1,4 @@
 {
-  "runtime": "python",
-  "setup": "pip install -e .",
   "start": "python -m server",
   "expect": "pass"
 }

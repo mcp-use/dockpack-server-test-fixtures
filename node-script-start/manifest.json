@@ -1,6 +1,4 @@
 {
-  "runtime": "node",
-  "setup": "npm ci",
   "build": "npm run build",
   "expect": "pass"
 }
