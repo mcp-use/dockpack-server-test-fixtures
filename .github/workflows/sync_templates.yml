@@ -25,16 +25,18 @@ jobs:
         run: |
           for template in starter mcp-ui apps-sdk; do
             fixture="mcp-use-$template"
+            tmp_dir="/tmp/scaffold-$template"
 
             # Preserve manifest and expected Dockerfile
             cp "$fixture/manifest.json" /tmp/manifest-$template.json
             cp "$fixture/expected.Dockerfile" /tmp/expected-$template.Dockerfile
 
-            # Remove old content (keep directory)
-            find "$fixture" -mindepth 1 -delete
+            # Scaffold into temp dir (CLI refuses existing directories)
+            npx create-mcp-use-app "$tmp_dir" --template "$template" --no-install --no-git --npm > /dev/null
 
-            # Scaffold fresh
-            npx create-mcp-use-app "$fixture" --template "$template" --no-install --no-git --npm
+            # Replace fixture contents
+            find "$fixture" -mindepth 1 -delete
+            cp -r "$tmp_dir"/. "$fixture"/
 
             # Restore manifest and expected Dockerfile
             cp /tmp/manifest-$template.json "$fixture/manifest.json"
@@ -50,7 +52,6 @@ jobs:
           cp "$fixture/manifest.json" /tmp/manifest-python.json
           cp "$fixture/expected.Dockerfile" /tmp/expected-python.Dockerfile
 
-          # Clone latest
           git clone --depth 1 https://github.com/mcp-use/python-server-starter.git /tmp/python-starter
           find "$fixture" -mindepth 1 -delete
           rsync -a --exclude='.git' /tmp/python-starter/ "$fixture/"
