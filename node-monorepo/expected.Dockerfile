@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.7
 
 # Node.js workspace/monorepo application
 FROM mirror.gcr.io/library/node:22-alpine AS build

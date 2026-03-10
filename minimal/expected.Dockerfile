@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.7
 
 # Minimal Node.js application (no package.json)
 FROM mirror.gcr.io/library/node:22-alpine
