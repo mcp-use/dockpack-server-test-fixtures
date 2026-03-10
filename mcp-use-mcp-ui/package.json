@@ -1,23 +1,20 @@
 {
-  "name": "test-starter",
+  "name": "test-mcp-ui",
   "type": "module",
   "version": "1.0.0",
-  "description": "MCP server: test-starter",
+  "description": "MCP server: test-mcp-ui",
   "author": "",
   "license": "MIT",
   "keywords": [
     "mcp",
     "server",
-    "starter",
-    "tools",
-    "resources",
-    "prompts",
     "uiresource",
     "ui",
     "react",
     "widgets",
-    "mcp-ui",
-    "apps-sdk"
+    "ai",
+    "tools",
+    "mcp-ui"
   ],
   "main": "dist/index.js",
   "scripts": {

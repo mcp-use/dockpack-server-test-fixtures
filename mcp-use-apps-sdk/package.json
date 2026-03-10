@@ -1,8 +1,8 @@
 {
-  "name": "test-starter",
+  "name": "test-apps-sdk",
   "type": "module",
   "version": "1.0.0",
-  "description": "MCP server: test-starter",
+  "description": "MCP server: test-apps-sdk",
   "author": "",
   "license": "MIT",
   "keywords": [
