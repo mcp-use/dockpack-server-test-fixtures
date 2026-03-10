@@ -1,21 +1,14 @@
 # syntax=docker/dockerfile:1.7
 
-# Optimized Dockerfile for Node.js applications
-FROM mirror.gcr.io/library/node:22-alpine AS dependencies
+# Node.js workspace/monorepo application
+FROM mirror.gcr.io/library/node:22-alpine AS build
 WORKDIR /app
-# Copy package files
-COPY package*.json ./
 
+# Copy all files (workspaces need full project structure)
+COPY . .
 
 # Install dependencies
 RUN npm install
-
-# Build stage
-FROM mirror.gcr.io/library/node:22-alpine AS build
-WORKDIR /app
-# Copy dependencies
-COPY --from=dependencies /app/node_modules ./node_modules
-COPY . .
 
 # Build application
 RUN npm run build

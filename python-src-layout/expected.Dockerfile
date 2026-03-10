@@ -9,11 +9,9 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # Copy dependency files first for better caching
-COPY pyproject.toml ./
+COPY . ./
 RUN --mount=type=cache,target=/root/.cache/pip pip install --no-cache-dir .
 
-# Copy application code
-COPY . .
 
 FROM python:3.11-slim AS runtime
 ENV PATH="/app/.venv/bin:$PATH"
