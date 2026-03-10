@@ -87,3 +87,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "Sync mcp-use templates from latest published packages"
           git push
+
+      - name: Trigger Docker build workflow
+        if: steps.diff.outputs.changed == 'true'
+        run: gh workflow run build_dockerfiles.yml
+        env:
+          GH_TOKEN: ${{ github.token }}
