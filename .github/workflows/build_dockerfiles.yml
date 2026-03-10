@@ -25,7 +25,7 @@ jobs:
           - python-no-start
           - python-src-layout
           - mcp-use-starter
-          - mcp-use-apps-sdk
+          - mcp-use-mcp-apps
           - mcp-use-python-starter
 
     name: ${{ matrix.fixture }}
