@@ -20,6 +20,7 @@ jobs:
           - node-env-vars
           - node-custom-port
           - node-root-dir
+          - node-existing-dockerfile
           - minimal
           - python-pip
           - python-uv
