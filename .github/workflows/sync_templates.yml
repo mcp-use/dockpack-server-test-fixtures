@@ -31,12 +31,15 @@ jobs:
             cp "$fixture/manifest.json" /tmp/manifest-$template.json
             cp "$fixture/expected.Dockerfile" /tmp/expected-$template.Dockerfile
 
-            # Scaffold into temp dir (CLI refuses existing directories)
-            npx create-mcp-use-app "$tmp_dir" --template "$template" --no-install --no-git --npm > /dev/null
+            # Scaffold into temp dir (CLI rejects paths and existing dirs)
+            cd /tmp
+            rm -rf "scaffold-$template"
+            npx create-mcp-use-app "scaffold-$template" --template "$template" --no-install --no-git --npm > /dev/null
+            cd -
 
             # Replace fixture contents
             find "$fixture" -mindepth 1 -delete
-            cp -r "$tmp_dir"/. "$fixture"/
+            cp -r "/tmp/scaffold-$template"/. "$fixture"/
 
             # Restore manifest and expected Dockerfile
             cp /tmp/manifest-$template.json "$fixture/manifest.json"
