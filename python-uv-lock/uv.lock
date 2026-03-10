@@ -1,0 +1,9 @@
+version = 1
+
+[[package]]
+name = "python-uv-lock-fixture"
+version = "1.0.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "mcp" },
+]

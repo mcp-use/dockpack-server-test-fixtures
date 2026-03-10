@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 
 FROM python:3.11-slim AS build
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+RUN pip install --no-cache-dir uv
 WORKDIR /app
 RUN python -m venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
@@ -10,7 +10,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Copy dependency files first for better caching
 COPY . ./
-RUN --mount=type=cache,target=/root/.cache/pip pip install --no-cache-dir .
+RUN --mount=type=cache,target=/root/.cache/uv uv pip install --no-cache-dir .
 
 
 FROM python:3.11-slim AS runtime

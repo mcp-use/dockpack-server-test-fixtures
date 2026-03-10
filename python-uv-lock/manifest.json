@@ -1,0 +1,4 @@
+{
+  "start": "python server.py",
+  "expect": "pass"
+}

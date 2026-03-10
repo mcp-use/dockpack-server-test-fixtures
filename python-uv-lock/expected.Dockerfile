@@ -9,8 +9,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # Copy dependency files first for better caching
-COPY requirements.txt ./
-RUN --mount=type=cache,target=/root/.cache/uv uv pip install --no-cache-dir -r requirements.txt
+COPY pyproject.toml uv.lock* ./
+RUN --mount=type=cache,target=/root/.cache/uv uv sync --frozen
 
 # Copy application code
 COPY . .

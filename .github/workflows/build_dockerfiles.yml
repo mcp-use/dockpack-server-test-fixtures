@@ -26,6 +26,7 @@ jobs:
           - python-uv
           - python-no-start
           - python-src-layout
+          - python-uv-lock
           - mcp-use-starter
           - mcp-use-mcp-apps
           - mcp-use-python-starter
