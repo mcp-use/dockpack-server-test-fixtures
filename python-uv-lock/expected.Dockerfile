@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-FROM python:3.11-slim AS build
+FROM mirror.gcr.io/library/python:3.11-slim AS build
 RUN pip install --no-cache-dir uv
 WORKDIR /app
 RUN python -m venv /app/.venv
@@ -15,7 +15,7 @@ RUN --mount=type=cache,target=/root/.cache/uv uv sync --frozen
 # Copy application code
 COPY . .
 
-FROM python:3.11-slim AS runtime
+FROM mirror.gcr.io/library/python:3.11-slim AS runtime
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
