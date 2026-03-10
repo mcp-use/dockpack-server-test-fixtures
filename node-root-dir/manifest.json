@@ -1,0 +1,6 @@
+{
+  "root_dir": "packages/server",
+  "build": "npm run build",
+  "start": "node dist/index.js",
+  "expect": "pass"
+}
