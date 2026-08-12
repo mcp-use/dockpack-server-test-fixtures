@@ -26,7 +26,7 @@
     "typecheck": "mcp-use typecheck"
   },
   "dependencies": {
-    "mcp-use": "2.1.0",
+    "mcp-use": "2.1.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
