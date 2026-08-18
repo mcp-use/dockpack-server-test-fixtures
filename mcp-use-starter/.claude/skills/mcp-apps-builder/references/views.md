@@ -1,67 +1,72 @@
 # Views
 
-## Layout and binding
+## Bind a View
 
-Create `views/<name>/view.tsx`. Bind one rendering tool with `view: { name }`, declare its `outputSchema`, and return matching `structuredContent`.
+Create `views/<name>/view.tsx`. Export the rendering tool ref, declare its `outputSchema`, bind `view: { name }`, and return matching `structuredContent`. The directory name and `view.name` must match exactly.
 
-The View is a React entry module. Do not add a provider wrapper just to access the host; the v2 runtime bootstraps the bridge.
+Use result `content` for a concise model-readable summary, `structuredContent` for typed render data, and `_meta` for invocation-specific data that should be visible only to the View.
 
-## Rendering lifecycle
+## Read the rendering call
 
-Use `useToolContext<"tool-name">()` and handle its discriminated states:
+Destructure `useToolContext()` and narrow its discriminated lifecycle before reading `toolOutput`:
 
 ```tsx
-const view = useToolContext<"search-products">();
+import { useToolContext } from "mcp-use/react";
 
-if (view.status === "pending") {
-  return <SearchSkeleton query={view.toolInput?.query} />;
+export default function ProductResults() {
+  const { status, toolInput, toolOutput, error, meta } =
+    useToolContext<"search-products">();
+
+  if (status === "pending") {
+    return <SearchSkeleton query={toolInput?.query} />;
+  }
+
+  if (status === "error") {
+    return <ErrorBanner message={error.message} />;
+  }
+
+  const source = typeof meta?.source === "string" ? meta.source : undefined;
+  return (
+    <Results
+      items={toolOutput.items}
+      source={source}
+    />
+  );
 }
-if (view.status === "error") {
-  return <ErrorBanner message={view.error.message} />;
-}
-return <Results items={view.toolOutput.items} />;
 ```
 
-`toolInput` may be partial while pending. `toolOutput` is available only when ready.
+`toolInput` may be partial while pending. Treat `meta` as untyped external data and validate or narrow it before use.
 
-## Focused hooks
+## Choose the interaction channel
 
-- `useCallTool("tool-name")`: invoke an exported server tool with inferred input/output types.
-- `useDynamicTool`: call a runtime-generated tool when no static exported ref exists.
-- `useViewState`: persist JSON-serializable model-visible View state.
-- `useHostContext`: inspect host capabilities and presentation context.
-- `useDisplayMode`: request or inspect display mode when supported.
-- `useSendFollowUp`: ask the host to continue the conversation.
-- `ThemeProvider`: apply host-aware theme tokens.
+- `useCallTool("tool-name")`: call an exported server tool with inferred types.
+- `useDynamicTool`: call a runtime-generated tool when no static ref exists.
+- `useSendFollowUp`: request a new model turn.
+- `useOpenExternal`: ask the host to open a URL outside the sandbox.
+- `useDisplayMode`: inspect and request a supported presentation mode.
+- `useViewTool`: expose a temporary action that operates on the mounted UI.
+- `useFiles`: use host file capabilities after checking support.
 
-Guard host-specific features with their support signal. Treat tool calls as asynchronous UI state: render pending and error states and preserve useful prior data where appropriate.
+Guard host actions with `useHostContext()` capability signals. A host may reject or modify a request, so render pending and failure states and read the resulting host state.
 
-## CSP and assets
+## State and model context
 
-Declare every external origin in the bound View's `csp` configuration. Use the
-installed v2 types and the narrow field that matches the browser operation:
+- Use React state for ephemeral UI details the model does not need.
+- Use `useViewState(objectDefault)` for JSON-serializable selections, filters, drafts, or progress that future model turns should understand.
+- Use `<ModelContext content="...">` to describe currently visible UI declaratively.
+- Store durable business data in the backend, not View state.
 
-- `connectDomains` for `fetch`, EventSource, and WebSocket connections
-- `resourceDomains` for scripts, styles, images, fonts, and media
-- `frameDomains` for embedded frames
-- `baseUriDomains` only when the View intentionally sets an external base URI
+Do not put secrets or large render-only payloads into model-visible state. Keep `_uiContext` reserved for the runtime.
 
-Use exact origins such as `https://api.example.com`, not paths. Keep the policy
-least-privilege: never add `*`, leave Inspector in Permissive mode, or weaken the
-host CSP to hide a violation. CORS is a separate server response contract and
-must still be configured for cross-origin requests.
+## Presentation, assets, and CSP
 
-After rendering the View, enforce **Widget-Declared** mode and inspect the CSP
-audit. In Vibe, use `chat_set_csp_mode` and `chat_read_csp_audit`; apply the
-reported exact-origin suggestions to `view.csp`, render again, and repeat until
-the audit reports `clean: true`. Also re-run `chat_read_runtime_errors` and take
-a final screenshot. A successful tool result or a View that only works in
-Permissive mode is not completion.
+Use `ThemeProvider`, `ViewControls`, `useViewTheme`, or `viewConfig` only when their behavior is needed; the runtime bootstraps the host bridge and enables automatic resizing by default. A named `viewConfig` may restrict supported display modes or disable automatic resize.
 
-Keep local View code and CSS inside the View folder. Put shared public assets in
-`public/` and resolve them through the request-provided public asset base rather
-than hard-coded localhost URLs.
+Keep View code and CSS under its View folder. Put shared public files in `public/` and resolve them through the framework's public asset base rather than a hard-coded localhost URL.
 
-## Type generation
+Declare exact external origins in `view.csp`:
 
-Export tool refs from the server entry so generated `RegisteredTools` types can connect View hook names to tool inputs and outputs. If a literal name is rejected, first confirm that the tool ref is exported and type generation has run.
+- `connectDomains` for fetch, EventSource, and WebSocket.
+- `resourceDomains` for scripts, styles, images, fonts, and media.
+- `frameDomains` for embedded frames.
+- `baseUriDomains` only for an intentional external base URI.
